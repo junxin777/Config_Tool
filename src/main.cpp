@@ -102,6 +102,7 @@ int main(int argc, char *argv[])
     }
     else if (op == enum_op_meta)
     {
+        cout << obj_cfg << endl;
         if (!obj_cfg.empty())
             read_cfg_meta(obj_cfg);
         else
