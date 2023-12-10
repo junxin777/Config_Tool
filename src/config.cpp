@@ -203,6 +203,8 @@ bool app_cfg::migrate_config(const string &ifn, const string &ofn) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+// initial version
+#if 0
 bool ap_cfg::parse_config() {
   try {
     // shim layer instance
@@ -421,6 +423,7 @@ bool ap_cfg::parse_config() {
     return false;
   }
 }
+#endif
 
 bool ap_cfg::set_compare(settings &A, settings &B) {
   if(A.getType() != B.getType())
@@ -490,6 +493,8 @@ void print_set_val(settings &s) {
   }
 }
 
+// initial version
+#if 0
 bool ap_cfg::migrate_config(const string &ifn, const string &ofn) {
   ap_cfg cfg_A, cfg_B;
   cfg_A.load_config(ifn.c_str());
@@ -509,12 +514,9 @@ bool ap_cfg::migrate_config(const string &ifn, const string &ofn) {
       settings &dps_A = ds_A[i];
       for (int j = 0; j < dps_B.getLength() - 1; ++j) {
         settings &ds_set_B = dps_B[j];
-        // print_set_val(ds_set_B);
         const string ds_b_name = ds_set_B.getName();
-        // cout << ds_b_name << endl;
         if (dps_A.exists(ds_b_name)) {
           settings &ds_set_A = dps_A.lookup(ds_b_name);
-          // print_set_val(ds_set_A);
           if (!set_compare(ds_set_B, ds_set_A)) {
             modify mod;
             if (ds_b_name == "name") {
@@ -525,21 +527,11 @@ bool ap_cfg::migrate_config(const string &ifn, const string &ofn) {
             mod.dp = 1;
             mod.val_dif = 1;
             modified.push_back(mod);
-            // cout << "mod name: " << mod.name << endl;
           }
         } else {
           added.push_back(ds_b_name);
-          // cout << "add name: " << ds_b_name << endl;
         }
       }
-      // cout << "modified: " << endl;
-      // for (size_t i = 0; i < modified.size(); ++i) {
-      //   cout << modified[i].name << endl;
-      // }
-      // cout << endl << "added: " << endl;
-      // for (size_t i = 0; i < added.size(); ++i) {
-      //   cout << added[i] << endl;
-      // }
 
       settings &ts_A = dps_A.lookup("buildings");
       settings &ts_B = dps_B.lookup("buildings");
@@ -562,21 +554,11 @@ bool ap_cfg::migrate_config(const string &ifn, const string &ofn) {
               mod.cl = 1;
               mod.val_dif = 1;
               modified.push_back(mod);
-              // cout << "mod name: " << mod.name << endl;
             }
           } else {
             added.push_back(ts_b_name);
-            // cout << "add name: " << ts_b_name << endl;
           }
         }
-        // cout << "modified: " << endl;
-        // for (size_t i = 0; i < modified.size(); ++i) {
-        //   cout << modified[i].name << endl;
-        // }
-        // cout << endl << "added: " << endl;
-        // for (size_t i = 0; i < added.size(); ++i) {
-        //   cout << added[i] << endl;
-        // }
 
         settings &cs_A = tls_A.lookup("aps");
         settings &cs_B = tls_B.lookup("aps");
@@ -609,13 +591,7 @@ bool ap_cfg::migrate_config(const string &ifn, const string &ofn) {
                     for (int j = 0; j < cs_set_B[i].getLength(); ++j) {
                       string a = static_cast<const char *>(cs_set_A[i][j]);
                       string b = static_cast<const char *>(cs_set_B[i][j]);
-                      // cout << a << endl;
-                      // cout << b << endl;
-                      // why this will make error??????????????? 
-                      // if (static_cast<const char *>(cs_set_A[i][j]) != static_cast<const char *>(cs_set_B[i][j]))
                       if (a != b) {
-                        // print_set_val(cs_set_A[i][j]);
-                        // print_set_val(cs_set_B[i][j]);
                         modify mod;
                         mod.name = "groups";
                         mod.ap = 1;
@@ -652,17 +628,8 @@ bool ap_cfg::migrate_config(const string &ifn, const string &ofn) {
               }
             } else {
               added.push_back(cs_b_name);
-              // cout << "add name: " << cs_b_name << endl;
             }
           }
-          // cout << "modified: " << endl;
-          // for (size_t i = 0; i < modified.size(); ++i) {
-          //   cout << modified[i].name << endl;
-          // }
-          // cout << endl << "added: " << endl;
-          // for (size_t i = 0; i < added.size(); ++i) {
-          //   cout << added[i] << endl;
-          // }
         }
         // ap migrate check end
       }
@@ -675,9 +642,7 @@ bool ap_cfg::migrate_config(const string &ifn, const string &ofn) {
       settings &dps_B = ds_B[i];
       for (int j = 0; j < dps_A.getLength() - 1; ++j) {
         settings &ds_set_A = dps_A[j];
-        // print_set_val(ds_set_A);
         const string ds_a_name = ds_set_A.getName();
-        // cout << ds_b_name << endl;
         if (!dps_B.exists(ds_a_name)) {
           deleted.push_back(ds_a_name);
         }
@@ -699,10 +664,6 @@ bool ap_cfg::migrate_config(const string &ifn, const string &ofn) {
             deleted.push_back(ts_a_name);
           }
         }
-        // cout << "deleted: " << endl;
-        // for (size_t i = 0; i < deleted.size(); ++i) {
-        //   cout << deleted[i] << endl;
-        // } 
 
         settings &cs_A = tls_A.lookup("aps");
         settings &cs_B = tls_B.lookup("aps");
@@ -717,10 +678,6 @@ bool ap_cfg::migrate_config(const string &ifn, const string &ofn) {
               deleted.push_back(cs_a_name);
             }
           }
-          // cout << "deleted: " << endl;
-          // for (size_t i = 0; i < deleted.size(); ++i) {
-          //   cout << deleted[i] << endl;
-          // }
         }
       }
     }
@@ -735,11 +692,9 @@ bool ap_cfg::migrate_config(const string &ifn, const string &ofn) {
     return false;
   }
 }
+#endif
 
-bool ap_cfg::build_config() {
-  return true;
-}
-
+// initial version
 #if 0
 bool ap_cfg::build_config(const string &ofn) {
   shim &sh = shim::instance();
@@ -952,8 +907,6 @@ string shim_cfg::get_parent_path(const settings &node) {
 void shim_cfg::traverse(const settings &node) {
   string node_name = node.getName();
   for (const auto &n : node) {
-    // string noden_name = n.getName();
-    // cout << "1: " << noden_name;
     object_config_ptr oc = nullptr;
     meta_map *mm = nullptr;
     member_map *bm = nullptr;
@@ -1108,9 +1061,6 @@ void shim_cfg::traverse(const settings &node) {
       else
         cerr << "unknown type, " << t.m_type << "; title, " << t.m_node << endl;
     }
-    // TODO:
-    // 1. iterate with less hardcode
-    // 2. handle composed fields in more elegant way
     if (node_name == "sites") {
       shim::instance().insert_config(oc);
       traverse(n["buildings"]);
@@ -1392,6 +1342,7 @@ void shim_cfg::build_traverse(shim &sh) {
           root.add("sites", settings::TypeList);
         settings &dc = root.lookup("sites");
         settings &ds = dc.add(settings::TypeGroup);
+        // locate site in output cfg file
         op = &ds;
       }
       else if (object_config::is_building(o->get_map_id())) {
@@ -1411,6 +1362,7 @@ void shim_cfg::build_traverse(shim &sh) {
           ds.add("buildings", Setting::TypeList);
         settings &tc = ds["buildings"];
         settings &ts = tc.add(settings::TypeGroup);
+        // locate building in output cfg file
         op = &ts;
       }
       else if (object_config::is_ap(o->get_map_id())) {
@@ -1419,7 +1371,6 @@ void shim_cfg::build_traverse(shim &sh) {
         (*bm)["building_name"].m_xetter->get((*bm)["building_name"].m_var, v_2);
         string dc_name = any_cast<string>(v_1);
         string tc_name = any_cast<string>(v_2);
-        cout << dc_name << " " << tc_name << endl;
         settings &dc = root["sites"];
         int count_ds = 0;
         int count_ts = 0;
@@ -1429,7 +1380,6 @@ void shim_cfg::build_traverse(shim &sh) {
             break;
           count_ds++;
         }
-        cout << count_ds << endl;
         settings &ds = dc[count_ds];
         settings &tc = ds["buildings"];
         for (auto &t : tc) {
@@ -1443,6 +1393,7 @@ void shim_cfg::build_traverse(shim &sh) {
           ts.add("aps", Setting::TypeList);
         settings &cc = ts["aps"];
         settings &cs = cc.add(settings::TypeGroup);
+        // locate ap in output cfg
         op = &cs;
       }
       
@@ -1570,187 +1521,6 @@ bool shim_cfg::build_config() {
     return false;
   }
 }
-
-
-
-#if 0
-bool shim_cfg::build_config() {
-  shim &sh = shim::instance();
-  reset();
-
-  try {
-    settings &root = result_cfg.getRoot();
-    root.add("ver", settings::TypeInt) = m_ver;
-
-    m_src_objs = sh.find_all_config();
-    map<uint64_t, string> id_key = sh.get_id_key();
-    
-    for (auto &o : sh.get_ordered_oc()) {
-      member_map *bm = nullptr;
-      meta_map *mm = nullptr;
-      settings *op = nullptr;
-      if(object_config::is_site(o->get_map_id())){
-        site_config_ptr sh_dc = dynamic_pointer_cast<site_config>(o);
-        bm = &(sh_dc->get_members());
-        mm = &(sh_dc->get_meta());
-        if (!root.exists("sites"))
-          root.add("sites", settings::TypeList);
-        settings &dc = root.lookup("sites");
-        settings &ds = dc.add(settings::TypeGroup);
-        op = &ds;
-      }
-      else if (object_config::is_building(o->get_map_id())) {
-        building_config_ptr sh_tc = dynamic_pointer_cast<building_config>(o);
-        bm = &(sh_tc->get_members());
-        mm = &(sh_tc->get_meta());
-
-        string dc_name = sh_tc->get_site_name();
-        settings &dc = root["sites"];
-        int count_dc = 0;
-        for (auto &d : dc) {
-          const char *name = static_cast<const char *>(d.lookup("name"));
-          if (name == dc_name) {
-            break;
-          }
-          count_dc++;
-        }
-        settings &ds = dc[count_dc];
-        if (!ds.exists("buildings"))
-          ds.add("buildings", Setting::TypeList);
-        settings &tc = ds["buildings"];
-        settings &ts = tc.add(settings::TypeGroup);
-        op = &ts;
-      }
-      else if (object_config::is_ap(o->get_map_id())) {
-        ap_config_ptr sh_cc = dynamic_pointer_cast<ap_config>(o);
-        bm = &(sh_cc->get_members());
-        mm = &(sh_cc->get_meta());
-        string dc_name = sh_cc->get_site_name();
-        string tc_name = sh_cc->get_building_name();
-        settings &dc = root["sites"];
-        int count_ds = 0;
-        int count_ts = 0;
-        for (auto &d : dc) {
-          const char *name = static_cast<const char *>(d.lookup("name"));
-          if (name == dc_name) {
-            break;
-          }
-          count_ds++;
-        }
-        settings &ds = dc[count_ds];
-        settings &tc = ds["buildings"];
-        for (auto &t : tc) {
-          const char *name = static_cast<const char *>(t.lookup("name"));
-          if (name == tc_name) {
-            break;
-          }
-          count_ts++;
-        }
-        settings &ts = tc[count_ts];
-        if (!ts.exists("aps"))
-          ts.add("aps", Setting::TypeList);
-        settings &cc = ts["aps"];
-        settings &cs = cc.add(settings::TypeGroup);
-        op = &cs;
-      }
-
-      for (auto &b : *bm) {
-        cout << b.first << endl;
-        std::any v;
-        b.second.m_xetter->get(b.second.m_var, v);
-        // cout << v.type().name() << endl;
-        meta_t m = (*mm)[b.first];
-        // cout << b.first << " " << m.m_type << endl;
-        // cout << "ok" << endl;
-        if (m.m_type == "int" || m.m_type == "int32_t") {
-          if (v.type() == typeid(int)) {
-            int val = any_cast<int>(v);
-            (*op).add(b.first, settings::TypeInt) = val;
-          }
-          else
-            throw runtime_error("unexpected type" + b.first);
-        }
-        else if (m.m_type == "unsigned") {
-          if (v.type() == typeid(unsigned)) {
-            unsigned int val = any_cast<unsigned int>(v);
-            (*op).add(b.first, settings::TypeInt) = static_cast<int>(val);
-          }
-          else 
-            throw runtime_error("unexpected type" + b.first);
-        }
-        else if (m.m_type == "long") {
-          if (v.type() == typeid(long)) {
-            long val = any_cast<long>(v);
-            (*op).add(b.first, settings::TypeInt64) = val;
-          }
-          else 
-            throw runtime_error("unexpected type" + b.first);
-        }
-        else if (m.m_type == "float") {
-          if (v.type() == typeid(float)) {
-            float val = any_cast<float>(v);
-            (*op).add(b.first, settings::TypeFloat) = val;
-          }
-          else
-            throw runtime_error("unexpected type" + b.first);
-        }
-        else if (m.m_type == "double") {
-          if (v.type() == typeid(double)) {
-            double val = any_cast<double>(v);
-            (*op).add(b.first, settings::TypeFloat) = val;
-          }
-          else 
-            throw runtime_error("unexpected type" + b.first);
-        }
-        else if (m.m_type == "string") {
-          if (v.type() == typeid(string)) {
-            string val = any_cast<string>(v);
-            (*op).add(b.first, settings::TypeString) = val;
-          }
-          else 
-            throw runtime_error("unexpected type" + b.first);
-        }
-        else if (m.m_type == "bool") {
-          if (v.type() == typeid(bool)) {
-            bool val = any_cast<bool>(v);
-            (*op).add(b.first, settings::TypeBoolean) = val;
-          }
-          else 
-            throw runtime_error("unexpected type" + b.first);
-        }
-        else if (m.m_type == "list<int>") {
-          if (v.type() == typeid(list<int>)) {
-            list<int> val = any_cast<list<int>>(v);
-            settings &temp = (*op).add(b.first, settings::TypeArray);
-            for (auto i : val) {
-              temp.add(settings::TypeInt) = i;
-            }
-          }
-          else 
-            throw runtime_error("unexpected type" + b.first);
-        }
-        else if (m.m_type == "list<string>") {
-          if (v.type() == typeid(list<string>)) {
-            list<string> val = any_cast<list<string>>(v);
-            settings &temp = (*op).add(b.first, settings::TypeArray);
-            for (auto i : val) {
-              temp.add(settings::TypeString) = i;
-            }
-          }
-          else 
-            throw runtime_error("unexpected type" + b.first);
-        }
-      }
-    }
-
-    return true;
-  }
-  catch (const exception &e) {
-    cerr << "fail to build" << e.what() << endl;
-    return false;
-  }
-}
-#endif
 
 } // namespace project
 
